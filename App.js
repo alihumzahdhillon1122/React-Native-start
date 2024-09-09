@@ -61,6 +61,7 @@ export default function app() {
       <View style={styles.goalsContainer}>
         {courseGoals.map((goal) => <Text key={goal}>{goal}</Text>)}
       </View>
+      
     </View>
 
   );
