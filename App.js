@@ -1,106 +1,54 @@
-// import {StyleSheet, Text, View, Button } from 'react-native';
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <View>
-
-//         <Text style={styles.headerText}>Another piece of text</Text>
-//       </View>
-//       <Text style={styles.headerText}>Hello world</Text>
-//       <Button title='Tap Me!' style={styles.button}/>
-
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-
-//   },
-//   headerText:{
-//       margin: 20,
-//     borderWidth:2,
-//     paddingTop:4,
-//     paddingLeft:4,
-//     borderColor:'#D63031'
-//   },
-//   button:{}
-// });
-
-
-
-
-
-
-
-
-
 import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
-export default function app() {
-  const [enteredGoalText, setEnterGoalText] = useState('')
-  const [courseGoals, setCourseGoal] = useState([])
-  function goalInputHandler(enteredText){
-    setEnterGoalText(enteredText)
+import { StyleSheet, View, FlatList} from "react-native";
+
+import GoalItem from "./componenets/GoalItem";
+
+import GoalInput from "./componenets/GoalInput";
+
+export default function App() {
+  const [courseGoals, setCourseGoals] = useState([]);
+
+  
+
+  function addGoalHandler(enteredGoalText) {
+    if (enteredGoalText.trim().length === 0) {
+      return; // Prevent adding empty goals
+    }
+
+    setCourseGoals((currentCourseGoals) => [
+      ...currentCourseGoals,
+      { id: Math.random().toString(), value: enteredGoalText }
+    ]);
+
+    // setEnteredGoalText(''); // Clear the input field
+    // Keyboard.dismiss(); // Dismiss the keyboard
   }
 
-  function addgoalhandler(){
-    setCourseGoal((currentCourseGoals) => [...courseGoals,enteredGoalText])
-  }
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput style={styles.textInput} placeholder="your course goal" onChangeText={goalInputHandler}/>
-        <Button  title="ADD GOAL" onPress={addgoalhandler}/>
-      </View>
+     <GoalInput onAddGoal={addGoalHandler}/>
       <View style={styles.goalsContainer}>
-        {courseGoals.map((goal) => <Text key={goal}>{goal}</Text>)}
+        <FlatList
+          data={courseGoals}
+          keyExtractor={(item) => item.id} // Unique key for each item
+          renderItem={(itemData) => (
+            <GoalItem value={itemData.item.value}/>
+          )}
+        />
       </View>
-      
     </View>
-
   );
-};
+}
 
 const styles = StyleSheet.create({
-  appContainer:{
-    flex:1,
-
-    paddingTop:50,
-    paddingHorizontal:16,
+  appContainer: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 16,
   },
-  inputContainer:{
-    flex:1,
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-    marginBottom:24,
-    borderBottomWidth:1,
-    borderColor:'red'
-
-
+  
+  goalsContainer: {
+    flex: 2,
   },
-  textInput:{
-    borderWidth:1,
-    borderColor:'#000',
-    width:'70%',
-    padding:10,
-    marginRight:8,
-    borderRadius:4,
-
-  },
-  goalsContainer:{
-    flex:3
-  }
-  
-
-  
-  
+ 
 });
-
-
