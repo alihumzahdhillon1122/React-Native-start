@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList, Button} from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import GoalItem from "./componenets/GoalItem";
 
 import GoalInput from "./componenets/GoalInput";
 
 export default function App() {
-  const[modalIsVisible, setModalIsVisible]= useState(false)
+  const [modalIsVisible, setModalIsVisible] = useState(false)
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function startAddGoalHandler(){
+  function startAddGoalHandler() {
     setModalIsVisible(true)
   }
-  function endGoalHandler(){ 
+  function endGoalHandler() {
     setModalIsVisible(false)
   }
 
@@ -31,29 +32,32 @@ export default function App() {
     // Keyboard.dismiss(); // Dismiss the keyboard
   }
 
-  function itemDeleteHandler(id){
+  function itemDeleteHandler(id) {
     setCourseGoals(currentCourseGoals => {
-      return currentCourseGoals.filter((goal) => goal.id !== id );
+      return currentCourseGoals.filter((goal) => goal.id !== id);
     })
-   
+
   }
 
   return (
-    <View style={styles.appContainer}>
-      <Button title="ADD NEW GOAL" color='#5e0acc' onPress={startAddGoalHandler}/>
-     <GoalInput visible={modalIsVisible} onAddGoal={addGoalHandler} onCancel={endGoalHandler}/>
-      <View style={styles.goalsContainer}>
-        <FlatList
-          data={courseGoals}
-          keyExtractor={(item) => item.id} // Unique key for each item
-          renderItem={(itemData) => (
-            <GoalItem value={itemData.item.value} 
-            id={itemData.item.id}
-            onDeleteItem={itemDeleteHandler}/>
-          )}
-        />
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button title="ADD NEW GOAL" color='#67E6DC' onPress={startAddGoalHandler} />
+        <GoalInput visible={modalIsVisible} onAddGoal={addGoalHandler} onCancel={endGoalHandler} />
+        <View style={styles.goalsContainer}>
+          <FlatList
+            data={courseGoals}
+            keyExtractor={(item) => item.id} // Unique key for each item
+            renderItem={(itemData) => (
+              <GoalItem value={itemData.item.value}
+                id={itemData.item.id}
+                onDeleteItem={itemDeleteHandler} />
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -63,9 +67,9 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
   },
-  
+
   goalsContainer: {
     flex: 5,
   },
- 
+
 });
